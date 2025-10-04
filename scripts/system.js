@@ -37,6 +37,32 @@ class StarWarsActorSheet extends ActorSheet {
   }
 }
 
+Hooks.once("createActor", (actor) => {
+  // Initialise les caractéristiques et compétences s’il n’y en a pas encore
+  if (!actor.system.characteristics) {
+    actor.update({
+      "system.characteristics": {
+        force: 1,
+        agilite: 1,
+        perception: 1,
+        intelligence: 1
+      }
+    });
+  }
+
+  if (!actor.system.skills) {
+    actor.update({
+      "system.skills": {
+        pilotage: 0,
+        tir: 0,
+        mecanique: 0,
+        discretion: 0
+      }
+    });
+  }
+});
+
+
 
 // ====================
 // 1. FONCTION DU MJ : ouvrir une fenêtre pour demander un jet

@@ -1,15 +1,41 @@
 <form class="actor-sheet" autocomplete="off">
-  <h1>{{actor.name}}</h1>
-  <h3>Caractéristiques</h3>
-  <ul>
-    <li>Force : {{data.characteristics.force}}</li>
-    <li>Agilité : {{data.characteristics.agilite}}</li>
-    <li>Intelligence : {{data.characteristics.intelligence}}</li>
-  </ul>
+  <header class="sheet-header flexrow">
+    <img class="profile-img" src="{{actor.img}}" title="{{actor.name}}" width="100" height="100" data-edit="img"/>
+    <div class="header-fields">
+      <h1><input name="name" type="text" value="{{actor.name}}" placeholder="Nom du personnage"/></h1>
+      <p><strong>Type :</strong> {{actor.type}}</p>
+    </div>
+  </header>
 
-  <h3>Compétences</h3>
-  <ul>
-    <li>Pilotage : {{data.skills.pilotage}}</li>
-    <li>Tir : {{data.skills.tir}}</li>
-  </ul>
+  <section class="sheet-body">
+    <h2>Caractéristiques</h2>
+    <table class="attributes">
+      <tr>
+        <th>Nom</th><th>Valeur</th>
+      </tr>
+      {{#each system.characteristics}}
+      <tr>
+        <td>{{@key}}</td>
+        <td><input type="number" name="system.characteristics.{{@key}}" value="{{this}}" data-dtype="Number"/></td>
+      </tr>
+      {{/each}}
+    </table>
+
+    <h2>Compétences</h2>
+    <table class="skills">
+      <tr>
+        <th>Nom</th><th>Valeur</th>
+      </tr>
+      {{#each system.skills}}
+      <tr>
+        <td>{{@key}}</td>
+        <td><input type="number" name="system.skills.{{@key}}" value="{{this}}" data-dtype="Number"/></td>
+      </tr>
+      {{/each}}
+    </table>
+
+    <div class="roll-test">
+      <button type="button" class="request-roll">Tester un jet</button>
+    </div>
+  </section>
 </form>
