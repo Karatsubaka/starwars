@@ -1,17 +1,154 @@
-Hooks.once("init", async function() {
+// ====================
+// INITIALISATION
+// ====================
+Hooks.once("init", () => {
   console.log("Initialisation du système de jeu.");
+  // Définition de la fiche de base pour les acteurs
+  Actors.unregisterSheet("core", ActorSheet); // Retire la fiche de base Foundry
+  Actors.registerSheet("starwars-kotor", StarWarsActorSheet, {
+    types: ["character"],
+    makeDefault: true
+  });
 
-  game.starwars = {
-    rollNarrative: function(actor, characteristic, skill) {
-      let caracValue = actor.data.data.characteristics[characteristic] || 0;
-      let skillValue = actor.data.data.skills[skill] || 0;
-      let rollFormula = `${caracValue + skillValue} + d10`;
-      new Roll(rollFormula).roll({async: true}).then(r => {
-        r.toMessage({
-          speaker: ChatMessage.getSpeaker({actor}),
-          flavor: `Je jette ${characteristic} + ${skill}.`
-        });
-      });
-    }
+  game.starwars= {
+    requestRoll: requestRoll,
+    rollNarrative: rollNarrative
   };
 });
+
+
+// ========================
+// CLASSE DE FICHE PERSONNAGE
+// ========================
+class StarWarsActorSheet extends ActorSheet {
+  /** @override */
+  get template() {
+    // Chemin vers ton fichier HTML
+    return "systems/starwars-kotor/templates/actor-sheet.html";
+  }
+
+  /** @override */
+  getData() {
+    const data = super.getData();
+    data.characteristics = this.actor.system.characteristics || {};
+    data.skills = this.actor.system.skills || {};
+    return data;
+  }
+}
+// ====================
+// 1. FONCTION DU MJ : ouvrir une fenêtre pour demander un jet
+// ====================
+function requestRoll() {
+  // Récupère tous les acteurs joueurs
+  const actors = game.actors.filter(a => a.hasPlayerOwner);
+  const actorOptions = actors.map(a => `<option value="${a.id}">${a.name}</option>`).join("");
+
+  // Création du dialogue pour le MJ
+  const dlg = new Dialog({
+    title: "Demander un jet",
+    content: `
+      <form>
+        <div class="form-group">
+          <label>Personnage :</label>
+          <select id="actor-select">${actorOptions}</select>
+        </div>
+        <div class="form-group">
+          <label>Caractéristique :</label>
+          <input type="text" id="characteristic" placeholder="ex: agilité">
+        </div>
+        <div class="form-group">
+          <label>Compétence :</label>
+          <input type="text" id="skill" placeholder="ex: pilotage">
+        </div>
+        <div class="form-group">
+          <label>Difficulté :</label>
+          <input type="number" id="difficulty" value="10">
+        </div>
+      </form>
+    `,
+    buttons: {
+      roll: {
+        label: "Demander le jet",
+        callback: html => {
+          const actorId = html.find("#actor-select").val();
+          const characteristic = html.find("#characteristic").val();
+          const skill = html.find("#skill").val();
+          const difficulty = parseInt(html.find("#difficulty").val());
+          sendRollRequest(actorId, characteristic, skill, difficulty);
+        }
+      },
+      cancel: { label: "Annuler" }
+    }
+  });
+  dlg.render(true);
+}
+
+// ====================
+// 2. ENVOI DE LA DEMANDE AU JOUEUR
+// ====================
+function sendRollRequest(actorId, characteristic, skill, difficulty) {
+  const payload = { actorId, characteristic, skill, difficulty };
+  game.socket.emit("system.starwars-kotor", { action: "request-roll", data: payload });
+  ui.notifications.info("Demande de jet envoyée au joueur !");
+}
+
+// ====================
+// 3. ÉCOUTE DES SOCKETS (pour tous les joueurs)
+// ====================
+Hooks.once("ready", () => {
+  game.socket.on("system.starwars-kotor", packet => {
+    if (packet.action === "request-roll") {
+      showPlayerDialog(packet.data);
+    }
+  });
+});
+
+// ====================
+// 4. CÔTÉ JOUEUR : affichage du dialogue et exécution du jet
+// ====================
+function showPlayerDialog({ actorId, characteristic, skill, difficulty }) {
+  const actor = game.actors.get(actorId);
+  if (!actor) return;
+
+  new Dialog({
+    title: "Jet demandé par le MJ",
+    content: `
+      <p><strong>${actor.name}</strong> doit effectuer un jet :</p>
+      <ul>
+        <li>Caractéristique : ${characteristic}</li>
+        <li>Compétence : ${skill}</li>
+        <li>Difficulté : ${difficulty}</li>
+      </ul>
+    `,
+    buttons: {
+      roll: {
+        label: "Lancer le dé !",
+        callback: () => {
+          rollNarrative(actor, characteristic, skill, difficulty);
+        }
+      },
+      cancel: { label: "Refuser" }
+    }
+  }).render(true);
+}
+
+// ====================
+// 5. FONCTION DE JET
+// ====================
+function rollNarrative(actor, characteristic, skill, difficulty = 10) {
+  const caracValue = actor.system?.characteristics?.[characteristic] || 0;
+  const skillValue = actor.system?.skills?.[skill] || 0;
+  const formula = `${caracValue + skillValue} + 1d10`;
+  const roll = new Roll(formula).roll({ async: false });
+
+  const result = roll.total >= difficulty ? "Réussite" : "Échec";
+
+  roll.toMessage({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor: `
+      <strong>${actor.name}</strong> fait un jet de <em>${characteristic}</em> + <em>${skill}</em><br>
+      Difficulté : ${difficulty}<br>
+      Résultat : <strong>${result}</strong>
+    `
+  });
+}

@@ -37,5 +37,6 @@
       "label": "Pouvoirs",
       "path": "compendium/powers.db"
     }
-  ]
+  ],
+  "actorTypes": ["character", "npc"]
 }
