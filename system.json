@@ -3,7 +3,7 @@
   "title": "Star Wars KOTOR Inspired",
   "description": "Système de jeu maison basé sur l'univers de Star Wars, pensé pour être utilisé en ligne.",
   "version": "0.1.0",
-  "author": "Benoît POUGAULT",
+  "author": "Benoit POUGAULT",
   "minimumCoreVersion": "10",
   "esmodules": [
     "scripts/system.js",
