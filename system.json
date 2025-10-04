@@ -7,7 +7,7 @@
     "minimum": "13",
     "verified": "13.350"
   },
-  "manifest": "https://raw.githubusercontent.com/Karatsubaka/starwars/refs/heads/main/system.json",
+  "manifest": "https://raw.githubusercontent.com/Karatsubaka/starwars/main/system.json",
   "authors": [
     {
       "name": "Benoit POUGAULT"
