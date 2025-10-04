@@ -41,5 +41,8 @@
       "type": "Item"
     }
   ],
-  "actorTypes": ["character", "npc"]
+  "actorTypes": ["character", "npc"],
+  "defaultActorType": "character",
+  "template": "systems/starwars/template.json"
+
 }

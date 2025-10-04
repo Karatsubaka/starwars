@@ -1,0 +1,27 @@
+{
+  "Actor": {
+    "types": {
+      "character": {
+        "characteristics": {
+          "force": 1,
+          "agilite": 1,
+          "perception": 1,
+          "intelligence": 1
+        },
+        "skills": {
+          "pilotage": 0,
+          "tir": 0,
+          "mecanique": 0,
+          "discretion": 0
+        }
+      },
+      "npc": {
+        "characteristics": {
+          "force": 1,
+          "agilite": 1
+        },
+        "skills": {}
+      }
+    }
+  }
+}
