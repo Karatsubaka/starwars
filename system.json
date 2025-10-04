@@ -1,10 +1,19 @@
 {
-  "name": "starwars",
-  "title": "Star Wars KOTOR Inspired",
-  "description": "Système de jeu maison basé sur l'univers de Star Wars, pensé pour être utilisé en ligne.",
+  "id": "starwars",
+  "title": "Star Wars",
+  "description": "Un système de jeu maison basé sur l'univers de Star Wars, pensé pour être utilisé sur FoundryVTT.",
   "version": "0.1.0",
-  "author": "Benoit POUGAULT",
-  "minimumCoreVersion": "10",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13.350"
+  },
+  "url": "https://github.com/Karatsubaka/starwars",
+  "manifest": "https://github.com/Karatsubaka/starwars/blob/main/system.json",
+  "authors": [
+    {
+      "name": "Benoit POUGAULT"
+    }
+  ],
   "esmodules": [
     "scripts/system.js",
     "scripts/combat.js"
