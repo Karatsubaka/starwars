@@ -2,15 +2,17 @@
 // INITIALISATION
 // ====================
 Hooks.once("init", () => {
-  console.log("Initialisation du système de jeu.");
+  console.log("Initialisation du système Star Wars.");
+
   // Définition de la fiche de base pour les acteurs
-  Actors.unregisterSheet("core", ActorSheet); // Retire la fiche de base Foundry
-  Actors.registerSheet("starwars-kotor", StarWarsActorSheet, {
+  Actors.unregisterSheet("core", ActorSheet);
+  Actors.registerSheet("starwars", StarWarsActorSheet, {
     types: ["character"],
     makeDefault: true
   });
 
-  game.starwars= {
+  // Création d’un namespace global pour le système
+  game.starwars = {
     requestRoll: requestRoll,
     rollNarrative: rollNarrative
   };
@@ -23,8 +25,7 @@ Hooks.once("init", () => {
 class StarWarsActorSheet extends ActorSheet {
   /** @override */
   get template() {
-    // Chemin vers ton fichier HTML
-    return "systems/starwars-kotor/templates/actor-sheet.html";
+    return "systems/starwars/templates/actor-sheet.html";
   }
 
   /** @override */
@@ -35,15 +36,15 @@ class StarWarsActorSheet extends ActorSheet {
     return data;
   }
 }
+
+
 // ====================
 // 1. FONCTION DU MJ : ouvrir une fenêtre pour demander un jet
 // ====================
 function requestRoll() {
-  // Récupère tous les acteurs joueurs
   const actors = game.actors.filter(a => a.hasPlayerOwner);
   const actorOptions = actors.map(a => `<option value="${a.id}">${a.name}</option>`).join("");
 
-  // Création du dialogue pour le MJ
   const dlg = new Dialog({
     title: "Demander un jet",
     content: `
@@ -83,28 +84,31 @@ function requestRoll() {
   dlg.render(true);
 }
 
+
 // ====================
 // 2. ENVOI DE LA DEMANDE AU JOUEUR
 // ====================
 function sendRollRequest(actorId, characteristic, skill, difficulty) {
   const payload = { actorId, characteristic, skill, difficulty };
-  game.socket.emit("system.starwars-kotor", { action: "request-roll", data: payload });
+  game.socket.emit("system.starwars", { action: "request-roll", data: payload });
   ui.notifications.info("Demande de jet envoyée au joueur !");
 }
 
+
 // ====================
-// 3. ÉCOUTE DES SOCKETS (pour tous les joueurs)
+// 3. ÉCOUTE DES SOCKETS
 // ====================
 Hooks.once("ready", () => {
-  game.socket.on("system.starwars-kotor", packet => {
+  game.socket.on("system.starwars", packet => {
     if (packet.action === "request-roll") {
       showPlayerDialog(packet.data);
     }
   });
 });
 
+
 // ====================
-// 4. CÔTÉ JOUEUR : affichage du dialogue et exécution du jet
+// 4. CÔTÉ JOUEUR : affichage du dialogue
 // ====================
 function showPlayerDialog({ actorId, characteristic, skill, difficulty }) {
   const actor = game.actors.get(actorId);
@@ -131,6 +135,7 @@ function showPlayerDialog({ actorId, characteristic, skill, difficulty }) {
     }
   }).render(true);
 }
+
 
 // ====================
 // 5. FONCTION DE JET
