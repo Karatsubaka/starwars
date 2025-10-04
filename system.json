@@ -1,0 +1,32 @@
+{
+  "name": "starwars",
+  "title": "Star Wars KOTOR Inspired",
+  "description": "Système de jeu maison basé sur l'univers de Star Wars, pensé pour être utilisé en ligne.",
+  "version": "0.1.0",
+  "author": "Benoît POUGAULT",
+  "minimumCoreVersion": "10",
+  "esmodules": [
+    "scripts/system.js",
+    "scripts/combat.js"
+  ],
+  "styles": [
+    "styles/style.css"
+  ],
+  "packs": [
+    {
+      "name": "races",
+      "label": "Races",
+      "path": "compendium/races.db"
+    },
+    {
+      "name": "classes",
+      "label": "Classes",
+      "path": "compendium/classes.db"
+    },
+    {
+      "name": "powers",
+      "label": "Pouvoirs",
+      "path": "compendium/powers.db"
+    }
+  ]
+}
