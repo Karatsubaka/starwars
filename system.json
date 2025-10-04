@@ -8,6 +8,7 @@
     "verified": "13.350"
   },
   "manifest": "https://raw.githubusercontent.com/Karatsubaka/starwars/main/system.json",
+  "download": "https://github.com/Karatsubaka/starwars/archive/refs/heads/main.zip",
   "authors": [
     {
       "name": "Benoit POUGAULT"
@@ -24,17 +25,20 @@
     {
       "name": "races",
       "label": "Races",
-      "path": "compendium/races.db"
+      "path": "compendium/races.db",
+      "type": "Item"
     },
     {
       "name": "classes",
       "label": "Classes",
-      "path": "compendium/classes.db"
+      "path": "compendium/classes.db",
+      "type": "Item"
     },
     {
       "name": "powers",
       "label": "Pouvoirs",
-      "path": "compendium/powers.db"
+      "path": "compendium/powers.db",
+      "type": "Item"
     }
   ],
   "actorTypes": ["character", "npc"]
