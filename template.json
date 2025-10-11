@@ -1,27 +1,17 @@
+src/template.json
 {
-  "Actor": {
-    "types": {
-      "character": {
-        "characteristics": {
-          "force": 1,
-          "agilite": 1,
-          "perception": 1,
-          "intelligence": 1
-        },
-        "skills": {
-          "pilotage": 0,
-          "tir": 0,
-          "mecanique": 0,
-          "discretion": 0
-        }
-      },
-      "npc": {
-        "characteristics": {
-          "force": 1,
-          "agilite": 1
-        },
-        "skills": {}
-      }
+  "name": "Star Wars D6 (Français)S",
+  "version": "1.0.0",
+  "language": "fr-FR",
+  "templates": {
+    "actor": {
+      "character": "templates/actor/character.html",
+      "npc": "templates/actor/npc.html"
+    },
+    "item": {
+      "skill": "templates/item/skill.html",
+      "equipment": "templates/item/equipment.html",
+      "force": "templates/item/force.html"
     }
   }
 }

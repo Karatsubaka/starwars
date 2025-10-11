@@ -1,48 +1,25 @@
+src/system.json
 {
-  "id": "starwars",
-  "title": "Star Wars",
-  "description": "Un système de jeu maison basé sur l'univers de Star Wars, pensé pour être utilisé sur FoundryVTT.",
-  "version": "0.1.0",
-  "compatibility": {
-    "minimum": "13",
-    "verified": "13.350"
-  },
-  "manifest": "https://raw.githubusercontent.com/Karatsubaka/starwars/main/system.json",
-  "download": "https://github.com/Karatsubaka/starwars/archive/refs/heads/main.zip",
+  "name": "Star Wars D6 (Français)",
+  "id": "swd6-fr",
+  "version": "1.0.0",
+  "title": "Star Wars D6 - Système Français",
+  "description": "Un système de jeu de rôle Star Wars basé sur D6, traduit en français, adapté pour Foundry VTT.",
+  "system": "swd6",
+  "versionMinimum": "10.290",
   "authors": [
-    {
-      "name": "Benoit POUGAULT"
+    "Benoît POUGAULT"
+  ],
+  "license": "MIT",
+  "icon": "icons/magic/energy/lightning-bolt-01.svg",
+  "metadata": {
+    "language": "fr",
+    "locale": "fr-FR"
+  },
+  "modules": {
+    "swd6": {
+      "name": "Star Wars D6",
+      "version": "1.0.0"
     }
-  ],
-  "esmodules": [
-    "scripts/system.js",
-    "scripts/combat.js"
-  ],
-  "styles": [
-    "styles/style.css"
-  ],
-  "packs": [
-    {
-      "name": "races",
-      "label": "Races",
-      "path": "compendium/races.db",
-      "type": "Item"
-    },
-    {
-      "name": "classes",
-      "label": "Classes",
-      "path": "compendium/classes.db",
-      "type": "Item"
-    },
-    {
-      "name": "powers",
-      "label": "Pouvoirs",
-      "path": "compendium/powers.db",
-      "type": "Item"
-    }
-  ],
-  "actorTypes": ["character", "npc"],
-  "defaultActorType": "character",
-  "template": "systems/starwars/template.json"
-
+  }
 }
